@@ -1,8 +1,11 @@
 import { Button, Table } from "antd";
 import { getProducts } from "../api/product";
 import EditProductModal from "../components/Edit.Product";
+import AddProductModal from "../components/Add.Product";
+import { deleteProduct } from "../api/product";
 
 function Products() {
+	const mutation = deleteProduct();
 	const columns = [
 		{
 			title: "N",
@@ -27,7 +30,13 @@ function Products() {
 				return (
 					<div className="flex gap-2">
 						<EditProductModal id={id} />
-						<Button type="primary" danger>
+						<Button
+							type="primary"
+							danger
+							onClick={() => {
+								mutation.mutate({ id });
+							}}
+						>
 							Delete
 						</Button>
 					</div>
@@ -47,7 +56,7 @@ function Products() {
 		<div className="!py-10 !px-12">
 			<div className="!flex !justify-between !items-center !mb-5">
 				<h2 className="!text-2xl !font-bold">Products</h2>
-				<Button>Add Product</Button>
+				<AddProductModal />
 			</div>
 			<Table columns={columns} dataSource={data} />
 		</div>

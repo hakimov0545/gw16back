@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button, Form, Input, Modal } from "antd";
-import { editProduct } from "../api/product";
-const EditProductModal = ({ id }) => {
-	const mutation = editProduct();
+import { addProduct } from "../api/product";
+
+const AddProductModal = ({ id }) => {
+	const mutation = addProduct();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const showModal = () => {
 		setIsModalOpen(true);
@@ -20,10 +21,10 @@ const EditProductModal = ({ id }) => {
 	return (
 		<>
 			<Button type="primary" onClick={showModal}>
-				Edit
+				Add
 			</Button>
 			<Modal
-				title="Edit Product Modal"
+				title="Add Product Modal"
 				closable={{ "aria-label": "Custom Close Button" }}
 				open={isModalOpen}
 				onOk={handleOk}
@@ -71,4 +72,4 @@ const EditProductModal = ({ id }) => {
 		</>
 	);
 };
-export default EditProductModal;
+export default AddProductModal;
