@@ -6,6 +6,7 @@ import cors from "cors";
 
 import ProductModel from "./models/product.model.js";
 import CategoryModel from "./models/category.model.js";
+import userModel from "./models/user.model.js";
 
 const app = express();
 
@@ -72,6 +73,30 @@ app.post("/categories", async (req, res) => {
 		const data = req.body;
 		const newCategory = await CategoryModel.create(data);
 		res.json(newCategory);
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
+
+app.post("/auth/register", async (req, res) => {
+	try {
+		const data = req.body;
+		const email = data.email;
+		const existingUser = await userModel.findOne({ email });
+		if (existingUser) {
+			res.json({
+				message: "User with this email already exists",
+			});
+			throw new Error("User with this email already exists");
+		}
+		const newUser = await userModel.create(data);
+		const user = {
+			id: newUser._id,
+			name: newUser.name,
+			email: newUser.email,
+		};
+		res.json(user);
 	} catch (error) {
 		console.log(error);
 		res.status(400).json({ message: error.message });
