@@ -7,6 +7,7 @@ import cors from "cors";
 import ProductModel from "./models/product.model.js";
 import CategoryModel from "./models/category.model.js";
 import userModel from "./models/user.model.js";
+import tokenService from "./services/token.service.js";
 
 const app = express();
 
@@ -96,7 +97,10 @@ app.post("/auth/register", async (req, res) => {
 			name: newUser.name,
 			email: newUser.email,
 		};
-		res.json(user);
+		const token = tokenService.generateToken(user);
+		await tokenService.saveToken(user.id, token);
+
+		res.json({ user, token });
 	} catch (error) {
 		console.log(error);
 		res.status(400).json({ message: error.message });
