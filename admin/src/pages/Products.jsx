@@ -3,9 +3,12 @@ import { getProducts } from "../api/product";
 import EditProductModal from "../components/Edit.Product";
 import AddProductModal from "../components/Add.Product";
 import { deleteProduct } from "../api/product";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Products() {
 	const mutation = deleteProduct();
+	const navigate = useNavigate();
 	const columns = [
 		{
 			title: "N",
@@ -45,12 +48,16 @@ function Products() {
 		},
 	];
 
+	useEffect(() => {
+		if (!localStorage.getItem("token")) {
+			navigate("/login");
+		}
+	}, []);
+
 	const { data, isLoading, error } = getProducts();
 
 	if (isLoading) return <div>Loading...</div>;
 	if (error) return <div>Error: {error.message}</div>;
-
-	console.log({ data });
 
 	return (
 		<div className="!py-10 !px-12">
