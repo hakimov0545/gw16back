@@ -107,6 +107,29 @@ app.post("/auth/register", async (req, res) => {
 	}
 });
 
+app.post("/auth/login", async (req, res) => {
+	try {
+		const { email, password } = req.body;
+		const user = await userModel.findOne({ email });
+		if (!user) {
+			res.status(404).json({ message: "User not found" });
+		}
+		if (user.password != password) {
+			res.status(403).json({ message: "Password incorrect" });
+		}
+		const userDto = {
+			id: user._id,
+			name: user.name,
+			email: user.email,
+		};
+		const token = tokenService.generateToken(userDto);
+		res.status(200).json({ token, user: userDto });
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
+
 async function starter() {
 	try {
 		await mongoose.connect(DB_URL).then(() => {
