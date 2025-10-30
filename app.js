@@ -80,6 +80,30 @@ app.post("/categories", async (req, res) => {
 	}
 });
 
+app.patch("/categories/:id", async (req, res) => {
+	try {
+		const data = req.body;
+		const updated = await CategoryModel.findByIdAndUpdate(
+			req.params.id,
+			data
+		);
+		res.json(updated);
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
+
+app.delete("/categories/:id", async (req, res) => {
+	try {
+		await CategoryModel.findByIdAndDelete(req.params.id);
+		res.json({ message: "Category deleted successfully" });
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ message: error.message });
+	}
+});
+
 app.post("/auth/register", async (req, res) => {
 	try {
 		const data = req.body;
